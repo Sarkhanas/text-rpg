@@ -44,10 +44,10 @@ namespace ConsoleApp2.Modules
                 {
                     sw.WriteLine(player.inventory[i].writer());
                 }*/
-                for (int i = 0; i < player.spheres.Count; i++)
+                /*for (int i = 0; i < player.spheres.Count; i++)
                 {
                     sw.WriteLine(player.spheres[i].writer());
-                }
+                }*/
                 return player;
             }
             catch (Exception e)
@@ -195,6 +195,26 @@ namespace ConsoleApp2.Modules
                     }
                     break;
             }
+        }
+
+        public void fight(Character player)
+        {
+            Random rnd = new Random();
+            string appRootDir = new DirectoryInfo(Environment.CurrentDirectory).Parent.Parent.FullName;
+            var filePathAndName = Path.Combine(appRootDir, "..\\Texts\\fight.txt");
+            StreamReader sr = new StreamReader(filePathAndName);
+            string dialogs = "";
+            string fightDialogs = "";
+            do
+            {
+                dialogs = sr.ReadLine();
+                fightDialogs += dialogs;
+            }
+            while (dialogs != null);
+            string[] startFightDialogs = fightDialogs.Split(new char[] { '&' });
+            Console.WriteLine(startFightDialogs[rnd.Next(0, startFightDialogs.Length)]);
+            Enemy enemy = new Enemy();
+            enemy.Info();
         }
     }
 }

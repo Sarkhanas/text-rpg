@@ -9,18 +9,9 @@ namespace ConsoleApp2
         
         static void Main(string[] args)
         {
-            Character Sarkhanas = new Character("Sarkhanas");
-            Sarkhanas.Info();
-            Sphere[] spheres = new Sphere[3];
-            for (int i = 0; i < spheres.Length; i++)
-            {
-                spheres[i] = new Sphere();
-            }
-            for (int i = 0; i < spheres.Length; i++)
-            {
-                Gameplay.open(Sarkhanas, spheres[i]);
-            }
-            Sarkhanas.Info();
+            Gameplay gp = new Gameplay();
+            Character player = new Character("player");
+            gp.fight(player);
         }
 
         //functions for gameplay... yup it is idiotic
