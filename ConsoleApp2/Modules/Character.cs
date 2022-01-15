@@ -18,6 +18,7 @@ namespace ConsoleApp2
         public Weapon weapon;
         public List<Item> inventory = new List<Item>() { new Item() };
         public List<Sphere> spheres = new List<Sphere>() { new Sphere() };
+        public List<string> effects = new List<string>();
 
         public Character(string name)
         {

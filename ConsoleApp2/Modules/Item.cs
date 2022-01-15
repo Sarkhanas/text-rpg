@@ -67,5 +67,10 @@ namespace ConsoleApp2.Modules
                 $"{this.type}\n" +
                 $"{this.effect}\n";
         }
+
+        public void Use(Character player)
+        {
+            player.effects.Add(this.effect);
+        }
     }
 }

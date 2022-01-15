@@ -13,6 +13,8 @@ namespace ConsoleApp2.Modules
         {
             try
             {
+                string appRootDir = new DirectoryInfo(Environment.CurrentDirectory).Parent.Parent.FullName;
+                var filePathAndName = Path.Combine(appRootDir, "..\\Profile\\profile.txt");
                 Console.Write("Write your nickname");
                 Character player = new Character(Console.ReadLine());
                 string inv = "";
@@ -25,7 +27,7 @@ namespace ConsoleApp2.Modules
                 {
                     spher += player.spheres[i].writer();
                 }
-                File.WriteAllText("../Profile/profile.txt",
+                File.WriteAllText(filePathAndName,
                     $"{player.name}\n" +
                     $"{player.health}\n" +
                     $"{player.damage}\n" +
@@ -39,7 +41,9 @@ namespace ConsoleApp2.Modules
                     $"\n" +
                     $"{inv}\n" +
                     $"{spher}\n");
-                StreamWriter sw = new StreamWriter("../Profile/profile.txt", true, Encoding.UTF8);
+
+                
+                StreamWriter sw = new StreamWriter(filePathAndName, true, Encoding.UTF8);
                 /*for (int i = 0; i < player.inventory.Count; i++)
                 {
                     sw.WriteLine(player.inventory[i].writer());
@@ -66,7 +70,9 @@ namespace ConsoleApp2.Modules
                     return register();
                 }
 
-                StreamReader sr = new StreamReader("../Profile/profile.txt");
+                string appRootDir = new DirectoryInfo(Environment.CurrentDirectory).Parent.Parent.FullName;
+                var filePathAndName = Path.Combine(appRootDir, "..\\Profile\\profile.txt");
+                StreamReader sr = new StreamReader(filePathAndName);
                 string lin = sr.ReadLine();
                 string inf = "";
                 do
@@ -200,6 +206,7 @@ namespace ConsoleApp2.Modules
         public void fight(Character player)
         {
             Random rnd = new Random();
+            int choose = 0;
             string appRootDir = new DirectoryInfo(Environment.CurrentDirectory).Parent.Parent.FullName;
             var filePathAndName = Path.Combine(appRootDir, "..\\Texts\\fight.txt");
             StreamReader sr = new StreamReader(filePathAndName);
@@ -215,6 +222,51 @@ namespace ConsoleApp2.Modules
             Console.WriteLine(startFightDialogs[rnd.Next(0, startFightDialogs.Length)]);
             Enemy enemy = new Enemy();
             enemy.Info();
+            do
+            {
+                choose = -1;
+                Console.WriteLine("What you gonna do?\n1-atack 2-item 0-escape");
+                switch (choose)
+                {
+                    case 1:
+                        player.Atack(enemy);
+                        enemy.Atack(player);
+                        Console.Clear();
+                        break;
+
+                    case 2:
+                        var chs = 0;
+                        Console.WriteLine($"inventory:");
+                        for (int i = 0; i < player.inventory.Count; i++)
+                        {
+                            Console.WriteLine($"{i+1}: ");
+                            player.inventory[i].Info();
+                        }
+                        Console.WriteLine("Выберите предмет для использования(номер предмета): ");
+                        chs = int.Parse(Console.ReadLine());
+                        if (chs > 0 && chs < player.inventory.Count)
+                        {
+                            player.inventory[chs].Use(player);
+                        }
+                        break;
+
+                    case 0:
+                        int luck = rnd.Next(1, 2);
+                        if (luck == 2) 
+                        {
+                            Console.WriteLine("You tried escape, but something goes wrong");
+                            enemy.Atack(player);
+                            goto default;
+                        } 
+                        break;
+
+                    default:
+                        choose = -1;
+                        break;
+                }
+                player.Info();
+                enemy.Info();
+            } while(player.health <= 0 || enemy.health <= 0 || choose == 0);
         }
     }
 }
