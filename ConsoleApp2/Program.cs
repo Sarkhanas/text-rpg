@@ -10,8 +10,8 @@ namespace ConsoleApp2
         static void Main(string[] args)
         {
             Gameplay gp = new Gameplay();
-            Character player = new Character("player");
-            gp.fight(player);
+            Character player = Gameplay.login();
+            player.Info();
         }
 
         //functions for gameplay... yup it is idiotic

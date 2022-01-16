@@ -40,18 +40,35 @@ namespace ConsoleApp2.Modules
                     this.lootnum = 5;
                     break;
             }
-            if (this.lootType == "item")
-            {
-                this.lootnum = 3;
-            }
         }
 
-        public Sphere(string name, string type, string lootType, int lootnum)
+        public Sphere(string name, string type, string lootType)
         {
             this.name = name;
             this.type = type;
             this.lootType = lootType;
-            this.lootnum = lootnum;
+            switch (this.type)
+            {
+                case "common":
+                    this.lootnum = 1;
+                    break;
+
+                case "uncommon":
+                    this.lootnum = 2;
+                    break;
+
+                case "rare":
+                    this.lootnum = 3;
+                    break;
+
+                case "epic":
+                    this.lootnum = 4;
+                    break;
+
+                case "legend":
+                    this.lootnum = 5;
+                    break;
+            }
         }
 
         public void Info()
@@ -66,8 +83,7 @@ namespace ConsoleApp2.Modules
         {
             return $"{this.name}\n" +
                 $"{this.type}\n" +
-                $"{this.lootType}\n" +
-                $"{this.lootnum}\n";
+                $"{this.lootType}\n";
         }
     }
 }

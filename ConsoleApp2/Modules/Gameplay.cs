@@ -32,15 +32,17 @@ namespace ConsoleApp2.Modules
                     $"{player.health}\n" +
                     $"{player.damage}\n" +
                     $"{player.resist}\n" +
-                    $"\n" +
+                    $"---\n" +
                     $"{player.hat.writer()}\n" +
                     $"{player.arms.writer()}\n" +
                     $"{player.body.writer()}\n" +
                     $"{player.legs.writer()}\n" +
+                    $"---\n" +
                     $"{player.weapon.writer()}\n" +
-                    $"\n" +
-                    $"{inv}\n" +
-                    $"{spher}\n");
+                    $"---\n" +
+                    $"{inv}" +
+                    $"---\n" +
+                    $"{spher}");
 
                 
                 StreamWriter sw = new StreamWriter(filePathAndName, true, Encoding.UTF8);
@@ -60,72 +62,55 @@ namespace ConsoleApp2.Modules
                 return null;
             }
         }
-
+        //need to correct
         public static Character login()
         {
-            try
-            {
-                if (Directory.EnumerateFiles("../Profile", "profile.txt", SearchOption.AllDirectories) == null)
-                {
-                    return register();
-                }
+            string appRootDir = new DirectoryInfo(Environment.CurrentDirectory).Parent.Parent.FullName;
+            var filePathAndName = Path.Combine(appRootDir, "..\\Profile");
 
-                string appRootDir = new DirectoryInfo(Environment.CurrentDirectory).Parent.Parent.FullName;
-                var filePathAndName = Path.Combine(appRootDir, "..\\Profile\\profile.txt");
-                StreamReader sr = new StreamReader(filePathAndName);
-                string lin = sr.ReadLine();
-                string inf = "";
-                do
-                {
-                    lin = sr.ReadLine();
-                    inf += lin;
-                }
-                while (lin != null);
-                string[] info = inf.Split(new char[] { ' ', '\n' });
-                List<Item> inventory = new List<Item>();
-                int itemIndexEnd = 0;
-                int checker = 0;
-                int i = 0;
-                while (i != info.Length-3)
-                {
-                    if (i > 18 && int.TryParse(info[i + 3], out checker))
-                    {
-                        inventory.Add(new Item(info[i], info[i + 1], info[i + 2]));
-                        i += 3;
-                    }
-                    else
-                    {
-                        itemIndexEnd = i;
-                        break;
-                    }
-                    i++;
-                }
-                i = 0;
-                List<Sphere> spheres = new List<Sphere>();
-                while (i != info.Length -3)
-                {
-                    if (i > itemIndexEnd && int.TryParse(info[i + 3], out checker))
-                    {
-                        spheres.Add(new Sphere(info[i], info[i + 1], info[i + 2], int.Parse(info[i + 3])));
-                        i += 3;
-                    }
-                    else
-                    {
-                        break;
-                    }
-                    i++;
-                }
-                Character player = new Character(info[0], int.Parse(info[1]), int.Parse(info[2]), int.Parse(info[3]),
-                    new Armor(info[4], info[5], info[6]), new Armor(info[7], info[8], info[9]),
-                    new Armor(info[10], info[11], info[12]), new Armor(info[13], info[14], info[15]),
-                    new Weapon(info[16], info[17], int.Parse(info[18])),
-                    inventory, spheres);
-                return player;
-            } catch (Exception e)
+            if (Directory.EnumerateFiles(filePathAndName, "profile.txt", SearchOption.AllDirectories) == null)
             {
-                Console.WriteLine($"Error: {e.Message}");
-                return null;
+                return register();
             }
+
+            appRootDir = new DirectoryInfo(Environment.CurrentDirectory).Parent.Parent.FullName;
+            filePathAndName = Path.Combine(appRootDir, "..\\Profile\\profile.txt");
+            StreamReader sr = new StreamReader(filePathAndName);
+            string lin = sr.ReadLine();
+            string inf = "";
+            do
+            {
+                lin = sr.ReadLine();
+                inf += lin;
+            }
+            while (lin != null);
+            string[] info = inf.Split(new char[] { ' ', '\n' });
+            List<Item> inventory = new List<Item>();
+            int itemIndexEnd = 0;
+            for (int l = 22; l < info.Length; l++)
+            {
+                if (info[l] == "---")
+                {
+                    itemIndexEnd = l;
+                    break;
+                }
+            }
+            for (int i = 22; i < itemIndexEnd; i += 3)
+            {
+                inventory.Add(new Item(info[i], info[i + 1], info[i + 2]));
+            }
+            List<Sphere> spheres = new List<Sphere>();
+            for (int i = itemIndexEnd + 1; i < info.Length; i += 3)
+            {
+                spheres.Add(new Sphere(info[i], info[i + 1], info[i + 2]));
+            }
+            Character player = new Character(
+                info[0], int.Parse(info[1]), int.Parse(info[2]), int.Parse(info[3]),
+                new Armor(info[5], info[6], info[7]), new Armor(info[8], info[9], info[10]),
+                new Armor(info[11], info[12], info[13]), new Armor(info[14], info[15], info[16]),
+                new Weapon(info[18], info[19], int.Parse(info[20])),
+                inventory, spheres);
+            return player;
         }
         public static void open(Character player, Sphere sphere)
         {
@@ -163,22 +148,7 @@ namespace ConsoleApp2.Modules
                         string answer = Console.ReadLine();
                         if (answer == "Y")
                         {
-                            if (lootArmor[i].name == config.armorName[0])
-                            {
-                                player.hat = lootArmor[i];
-                            }
-                            if (lootArmor[i].name == config.armorName[1])
-                            {
-                                player.body = lootArmor[i];
-                            }
-                            if (lootArmor[i].name == config.armorName[2])
-                            {
-                                player.legs = lootArmor[i];
-                            }
-                            if (lootArmor[i].name == config.armorName[3])
-                            {
-                                player.arms = lootArmor[i];
-                            }
+                            player.Equip(lootArmor[i]);
                         }
                     }
                     break;
@@ -196,7 +166,7 @@ namespace ConsoleApp2.Modules
                         string answer = Console.ReadLine();
                         if (answer.ToUpper() == "Y")
                         {
-                            player.weapon = lootWeapon[i];
+                            player.Equip(lootWeapon[i]);
                         }
                     }
                     break;

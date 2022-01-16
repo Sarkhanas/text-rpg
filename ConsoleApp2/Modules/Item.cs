@@ -17,8 +17,8 @@ namespace ConsoleApp2.Modules
 
             if (this.type == "scroll")
             {
-                this.name = this.type;
                 this.effect = config.itemEffects[3];
+                this.name = this.effect + " " + this.type;
             }
 
             if (this.type == "food")
@@ -98,6 +98,12 @@ namespace ConsoleApp2.Modules
                     break;
 
                 case "glazing":
+                    player.health = 1;
+
+                    player.damage += player.health > 1 ?
+                        30 + (player.health * 99) / 100
+                        :
+                        30 + (player.maxHP * 99) / 100;
 
                     break;
             }
