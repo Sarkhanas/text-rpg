@@ -242,13 +242,13 @@ namespace ConsoleApp2.Modules
                             Console.WriteLine($"{i+1}: ");
                             player.inventory[i].Info();
                         }
-                        Console.WriteLine("Выберите предмет для использования(номер предмета): ");
+                        Console.WriteLine("Choose item(item number, 0 - turn back to action list): ");
                         chs = int.Parse(Console.ReadLine());
                         if (chs > 0 && chs < player.inventory.Count)
                         {
                             player.inventory[chs].Use(player);
                         }
-                        break;
+                        goto default;
 
                     case 0:
                         int luck = rnd.Next(1, 2);

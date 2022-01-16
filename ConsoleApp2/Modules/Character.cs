@@ -8,6 +8,7 @@ namespace ConsoleApp2
     class Character
     {
         public string name;
+        public int maxHP = 100;
         public int health;
         public int damage;
         public int resist;

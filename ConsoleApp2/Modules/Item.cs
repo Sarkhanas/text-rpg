@@ -71,6 +71,36 @@ namespace ConsoleApp2.Modules
         public void Use(Character player)
         {
             player.effects.Add(this.effect);
+            switch (this.effect)
+            {
+                case "heal":
+                    player.health += 45;
+                    if (player.health > player.maxHP)
+                    {
+                        player.health = player.maxHP;
+                    }
+                    break;
+
+                case "resist":
+                    player.resist += player.resist > 55 ? (15 + player.resist) * 5 / 100 : 15;
+                    if (player.resist > 95)
+                    {
+                        player.resist = 95;
+                    }
+                    break;
+
+                case "power":
+                    player.damage += 10;
+                    break;
+
+                case "Max HP":
+                    player.maxHP += 15;
+                    break;
+
+                case "glazing":
+
+                    break;
+            }
         }
     }
 }
