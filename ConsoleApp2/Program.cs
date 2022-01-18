@@ -10,7 +10,7 @@ namespace ConsoleApp2
         static void Main(string[] args)
         {
             Gameplay gp = new Gameplay();
-            Character player = Gameplay.register();
+            Character player = Gameplay.login();
             player.Info();
         }
 

@@ -33,10 +33,10 @@ namespace ConsoleApp2.Modules
                     $"{player.damage}\n" +
                     $"{player.resist}\n" +
                     $"---\n" +
-                    $"{(player.hat == null? new Armor(null, null, null).writer(): player.hat.writer())}\n" +
-                    $"{(player.arms == null ? new Armor(null, null, null).writer() : player.arms.writer())}\n" +
-                    $"{(player.body == null ? new Armor(null, null, null).writer() : player.body.writer())}\n" +
-                    $"{(player.legs == null ? new Armor(null, null, null).writer() : player.legs.writer())}\n" +
+                    $"{(player.hat == null? new Armor(null, null, null).writer(): player.hat.writer())}" +
+                    $"{(player.arms == null ? new Armor(null, null, null).writer() : player.arms.writer())}" +
+                    $"{(player.body == null ? new Armor(null, null, null).writer() : player.body.writer())}" +
+                    $"{(player.legs == null ? new Armor(null, null, null).writer() : player.legs.writer())}" +
                     $"---\n" +
                     $"{player.weapon.writer()}" +
                     $"---\n" +
@@ -77,19 +77,21 @@ namespace ConsoleApp2.Modules
             filePathAndName = Path.Combine(appRootDir, "..\\Profile\\profile.txt");
             StreamReader sr = new StreamReader(filePathAndName);
             string lin = sr.ReadLine();
-            string inf = "";
+            string[] inf = new string[32];
+            inf[0] = lin;
+            int p = 1;
             do
             {
                 lin = sr.ReadLine();
-                inf += lin;
+                inf[p] += lin;
+                p++;
             }
             while (lin != null);
-            string[] info = inf.Split(new char[] { ' ', '\n' });
             List<Item> inventory = new List<Item>();
             int itemIndexEnd = 0;
-            for (int l = 22; l < info.Length; l++)
+            for (int l = 22; l < inf.Length; l++)
             {
-                if (info[l] == "---")
+                if (inf[l] == "---")
                 {
                     itemIndexEnd = l;
                     break;
@@ -97,19 +99,23 @@ namespace ConsoleApp2.Modules
             }
             for (int i = 22; i < itemIndexEnd; i += 3)
             {
-                inventory.Add(new Item(info[i], info[i + 1], info[i + 2]));
+                inventory.Add(new Item(inf[i], inf[i + 1], inf[i + 2]));
             }
             List<Sphere> spheres = new List<Sphere>();
-            for (int i = itemIndexEnd + 1; i < info.Length; i += 3)
+            for (int i = itemIndexEnd + 1; i < inf.Length-3; i += 3)
             {
-                spheres.Add(new Sphere(info[i], info[i + 1], info[i + 2]));
+                spheres.Add(new Sphere(inf[i], inf[i + 1], inf[i + 2]));
             }
             Character player = new Character(
-                info[0], int.Parse(info[1]), int.Parse(info[2]), int.Parse(info[3]),
-                new Armor(info[5], info[6], info[7]), new Armor(info[8], info[9], info[10]),
-                new Armor(info[11], info[12], info[13]), new Armor(info[14], info[15], info[16]),
-                new Weapon(info[18], info[19], int.Parse(info[20])),
+                inf[0], int.Parse(inf[1]), int.Parse(inf[2]), int.Parse(inf[3]),
+                new Armor(inf[5], inf[6], inf[7]), new Armor(inf[8], inf[9], inf[10]),
+                new Armor(inf[11], inf[12], inf[13]), new Armor(inf[14], inf[15], inf[16]),
+                new Weapon(inf[18], inf[19], int.Parse(inf[20])),
                 inventory, spheres);
+            /*foreach(var elem in inf)
+            {
+                Console.WriteLine(elem);
+            }*/
             return player;
         }
         public static void open(Character player, Sphere sphere)

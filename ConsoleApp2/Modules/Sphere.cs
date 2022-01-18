@@ -83,7 +83,7 @@ namespace ConsoleApp2.Modules
         {
             return $"{this.name}\n" +
                 $"{this.type}\n" +
-                $"{this.lootType}\n";
+                $"{this.lootType}";
         }
     }
 }
