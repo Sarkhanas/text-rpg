@@ -9,6 +9,7 @@ namespace ConsoleApp2.Modules
         public string name;
         public string type;
         public string effect;
+        protected string empty = "";
         Config config = new Config();
 
         public Armor()
@@ -35,15 +36,15 @@ namespace ConsoleApp2.Modules
         public void Info()
         {
             Console.WriteLine(
-                $"name: {this.name}\n" +
-                $"type: {this.type}\n" +
-                $"effect: {this.effect}\n");
+                $"name: {(this.name == null ? this.empty : this.name)}\n" +
+                $"type: {(this.type == null ? this.empty : this.type)}\n" +
+                $"effect: {(this.effect == null ? this.empty : this.effect)}\n");
         }
         public string writer()
         {
-            return $"{this.name}\n" +
-                $"{this.type}\n" +
-                $"{this.effect}\n";
+            return $"{(this.name == null? this.empty: this.name)}\n" +
+                $"{(this.type == null? this.empty: this.type)}\n" +
+                $"{(this.effect == null? this.empty: this.effect)}\n";
         }
     }
 }

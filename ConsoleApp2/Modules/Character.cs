@@ -125,30 +125,47 @@ namespace ConsoleApp2
                 $"damage: {this.damage}\n" +
                 $"resist: {this.resist}%\n" +
                 $"armor:\n");
-            if (this.hat != null || this.hat.name != "")
+            if (this.hat != null)
             {
-                Console.WriteLine("hat: ");
-                this.hat.Info();
+                if(this.hat.name != "")
+                {
+                    Console.WriteLine("hat: ");
+                    this.hat.Info();
+                }
             }
-            if (this.arms != null || this.arms.name != "")
+            if (this.arms != null)
             {
-                Console.WriteLine("arms: ");
-                this.arms.Info();
+                if (this.arms.name != "")
+                {
+                    Console.WriteLine("arms: ");
+                    this.arms.Info();
+                }
+                
             }
-            if (this.body != null || this.body.name != "")
+            if (this.body != null)
             {
-                Console.WriteLine("body: ");
-                this.body.Info();
+                if (this.body.name != "")
+                {
+                    Console.WriteLine("body: ");
+                    this.body.Info();
+                }
+                
             }
-            if (this.legs != null || this.legs.name != "")
+            if (this.legs != null)
             {
-                Console.WriteLine("legs: ");
-                this.legs.Info();
+                if (this.legs.name != "")
+                {
+                    Console.WriteLine("legs: ");
+                    this.legs.Info();
+                }
             }
-            if (this.weapon != null || this.weapon.name != "")
+            if (this.weapon != null)
             {
-                Console.WriteLine("weapon: ");
-                this.weapon.Info();
+                if (this.weapon.name != "")
+                {
+                    Console.WriteLine("weapon: ");
+                    this.weapon.Info();
+                }
             }
             Console.WriteLine("inventory: ");
             for (int i = 0; i < this.inventory.Count; i++)

@@ -15,7 +15,7 @@ namespace ConsoleApp2.Modules
             {
                 string appRootDir = new DirectoryInfo(Environment.CurrentDirectory).Parent.Parent.FullName;
                 var filePathAndName = Path.Combine(appRootDir, "..\\Profile\\profile.txt");
-                Console.Write("Write your nickname");
+                Console.Write("Write your nickname: ");
                 Character player = new Character(Console.ReadLine());
                 string inv = "";
                 string spher = "";
@@ -33,12 +33,12 @@ namespace ConsoleApp2.Modules
                     $"{player.damage}\n" +
                     $"{player.resist}\n" +
                     $"---\n" +
-                    $"{player.hat.writer()}\n" +
-                    $"{player.arms.writer()}\n" +
-                    $"{player.body.writer()}\n" +
-                    $"{player.legs.writer()}\n" +
+                    $"{(player.hat == null? new Armor(null, null, null).writer(): player.hat.writer())}\n" +
+                    $"{(player.arms == null ? new Armor(null, null, null).writer() : player.arms.writer())}\n" +
+                    $"{(player.body == null ? new Armor(null, null, null).writer() : player.body.writer())}\n" +
+                    $"{(player.legs == null ? new Armor(null, null, null).writer() : player.legs.writer())}\n" +
                     $"---\n" +
-                    $"{player.weapon.writer()}\n" +
+                    $"{player.weapon.writer()}" +
                     $"---\n" +
                     $"{inv}" +
                     $"---\n" +
@@ -216,7 +216,7 @@ namespace ConsoleApp2.Modules
                         chs = int.Parse(Console.ReadLine());
                         if (chs > 0 && chs < player.inventory.Count)
                         {
-                            player.inventory[chs].Use(player);
+                            player.inventory[chs-1].Use(player);
                         }
                         goto default;
 

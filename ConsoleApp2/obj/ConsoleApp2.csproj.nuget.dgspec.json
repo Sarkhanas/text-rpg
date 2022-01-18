@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Daniil\\Desktop\\text-rpg\\ConsoleApp2\\ConsoleApp2.csproj": {}
+    "C:\\Users\\Daniil\\source\\repos\\text-rpg\\ConsoleApp2\\ConsoleApp2.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Daniil\\Desktop\\text-rpg\\ConsoleApp2\\ConsoleApp2.csproj": {
+    "C:\\Users\\Daniil\\source\\repos\\text-rpg\\ConsoleApp2\\ConsoleApp2.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Daniil\\Desktop\\text-rpg\\ConsoleApp2\\ConsoleApp2.csproj",
+        "projectUniqueName": "C:\\Users\\Daniil\\source\\repos\\text-rpg\\ConsoleApp2\\ConsoleApp2.csproj",
         "projectName": "ConsoleApp2",
-        "projectPath": "C:\\Users\\Daniil\\Desktop\\text-rpg\\ConsoleApp2\\ConsoleApp2.csproj",
+        "projectPath": "C:\\Users\\Daniil\\source\\repos\\text-rpg\\ConsoleApp2\\ConsoleApp2.csproj",
         "packagesPath": "C:\\Users\\Daniil\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Daniil\\Desktop\\text-rpg\\ConsoleApp2\\obj\\",
+        "outputPath": "C:\\Users\\Daniil\\source\\repos\\text-rpg\\ConsoleApp2\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages",
@@ -55,12 +55,18 @@
           ],
           "assetTargetFallback": true,
           "warn": true,
+          "downloadDependencies": [
+            {
+              "name": "Microsoft.NETCore.App.Host.win-x64",
+              "version": "[3.1.21, 3.1.21]"
+            }
+          ],
           "frameworkReferences": {
             "Microsoft.NETCore.App": {
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.404\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.100\\RuntimeIdentifierGraph.json"
         }
       }
     }
