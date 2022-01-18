@@ -13,47 +13,11 @@ namespace ConsoleApp2.Modules
         {
             try
             {
-                string appRootDir = new DirectoryInfo(Environment.CurrentDirectory).Parent.Parent.FullName;
-                var filePathAndName = Path.Combine(appRootDir, "..\\Profile\\profile.txt");
                 Console.Write("Write your nickname: ");
                 Character player = new Character(Console.ReadLine());
-                string inv = "";
-                string spher = "";
-                for (int i = 0; i < player.inventory.Count; i++)
-                {
-                    inv += player.inventory[i].writer();
-                }
-                for (int i = 0; i < player.spheres.Count; i++)
-                {
-                    spher += player.spheres[i].writer();
-                }
-                File.WriteAllText(filePathAndName,
-                    $"{player.name}\n" +
-                    $"{player.health}\n" +
-                    $"{player.damage}\n" +
-                    $"{player.resist}\n" +
-                    $"---\n" +
-                    $"{(player.hat == null? new Armor(null, null, null).writer(): player.hat.writer())}" +
-                    $"{(player.arms == null ? new Armor(null, null, null).writer() : player.arms.writer())}" +
-                    $"{(player.body == null ? new Armor(null, null, null).writer() : player.body.writer())}" +
-                    $"{(player.legs == null ? new Armor(null, null, null).writer() : player.legs.writer())}" +
-                    $"---\n" +
-                    $"{player.weapon.writer()}" +
-                    $"---\n" +
-                    $"{inv}" +
-                    $"---\n" +
-                    $"{spher}");
 
-                
-                StreamWriter sw = new StreamWriter(filePathAndName, true, Encoding.UTF8);
-                /*for (int i = 0; i < player.inventory.Count; i++)
-                {
-                    sw.WriteLine(player.inventory[i].writer());
-                }*/
-                /*for (int i = 0; i < player.spheres.Count; i++)
-                {
-                    sw.WriteLine(player.spheres[i].writer());
-                }*/
+                save(player);
+
                 return player;
             }
             catch (Exception e)
@@ -62,62 +26,102 @@ namespace ConsoleApp2.Modules
                 return null;
             }
         }
-        //need to correct
+        
         public static Character login()
         {
-            string appRootDir = new DirectoryInfo(Environment.CurrentDirectory).Parent.Parent.FullName;
-            var filePathAndName = Path.Combine(appRootDir, "..\\Profile");
+            try
+            {
+                string appRootDir = new DirectoryInfo(Environment.CurrentDirectory).Parent.Parent.FullName;
+                var filePathAndName = Path.Combine(appRootDir, "..\\Profile\\profile.txt");
 
-            if (Directory.EnumerateFiles(filePathAndName, "profile.txt", SearchOption.AllDirectories) == null)
-            {
-                return register();
-            }
-
-            appRootDir = new DirectoryInfo(Environment.CurrentDirectory).Parent.Parent.FullName;
-            filePathAndName = Path.Combine(appRootDir, "..\\Profile\\profile.txt");
-            StreamReader sr = new StreamReader(filePathAndName);
-            string lin = sr.ReadLine();
-            string[] inf = new string[32];
-            inf[0] = lin;
-            int p = 1;
-            do
-            {
-                lin = sr.ReadLine();
-                inf[p] += lin;
-                p++;
-            }
-            while (lin != null);
-            List<Item> inventory = new List<Item>();
-            int itemIndexEnd = 0;
-            for (int l = 22; l < inf.Length; l++)
-            {
-                if (inf[l] == "---")
+                if (!File.Exists(filePathAndName))
                 {
-                    itemIndexEnd = l;
-                    break;
+                    return register();
                 }
-            }
-            for (int i = 22; i < itemIndexEnd; i += 3)
+
+                StreamReader sr = new StreamReader(filePathAndName);
+                string lin = sr.ReadLine();
+                string[] inf = new string[32];
+                inf[0] = lin;
+                int p = 1;
+                do
+                {
+                    lin = sr.ReadLine();
+                    inf[p] += lin;
+                    p++;
+                }
+                while (lin != null);
+                List<Item> inventory = new List<Item>();
+                int itemIndexEnd = 0;
+                for (int l = 22; l < inf.Length; l++)
+                {
+                    if (inf[l] == "---")
+                    {
+                        itemIndexEnd = l;
+                        break;
+                    }
+                }
+                for (int i = 22; i < itemIndexEnd; i += 3)
+                {
+                    inventory.Add(new Item(inf[i], inf[i + 1], inf[i + 2]));
+                }
+                List<Sphere> spheres = new List<Sphere>();
+                for (int i = itemIndexEnd + 1; i < inf.Length - 3; i += 3)
+                {
+                    spheres.Add(new Sphere(inf[i], inf[i + 1], inf[i + 2]));
+                }
+                Character player = new Character(
+                    inf[0], int.Parse(inf[1]), int.Parse(inf[2]), int.Parse(inf[3]),
+                    new Armor(inf[5], inf[6], inf[7]), new Armor(inf[8], inf[9], inf[10]),
+                    new Armor(inf[11], inf[12], inf[13]), new Armor(inf[14], inf[15], inf[16]),
+                    new Weapon(inf[18], inf[19], int.Parse(inf[20])),
+                    inventory, spheres);
+                sr.Close();
+                return player;
+            } catch (Exception e)
             {
-                inventory.Add(new Item(inf[i], inf[i + 1], inf[i + 2]));
+                Console.WriteLine($"Error: {e.Message}");
+                return null;
             }
-            List<Sphere> spheres = new List<Sphere>();
-            for (int i = itemIndexEnd + 1; i < inf.Length-3; i += 3)
-            {
-                spheres.Add(new Sphere(inf[i], inf[i + 1], inf[i + 2]));
-            }
-            Character player = new Character(
-                inf[0], int.Parse(inf[1]), int.Parse(inf[2]), int.Parse(inf[3]),
-                new Armor(inf[5], inf[6], inf[7]), new Armor(inf[8], inf[9], inf[10]),
-                new Armor(inf[11], inf[12], inf[13]), new Armor(inf[14], inf[15], inf[16]),
-                new Weapon(inf[18], inf[19], int.Parse(inf[20])),
-                inventory, spheres);
-            /*foreach(var elem in inf)
-            {
-                Console.WriteLine(elem);
-            }*/
-            return player;
+            
         }
+
+        public static void save(Character player)
+        {
+            string appRootDir = new DirectoryInfo(Environment.CurrentDirectory).Parent.Parent.FullName;
+            var filePathAndName = Path.Combine(appRootDir, "..\\Profile\\profile.txt");
+            string inv = "";
+            string spher = "";
+            for (int i = 0; i < player.inventory.Count; i++)
+            {
+                inv += player.inventory[i].writer();
+            }
+            for (int i = 0; i < player.spheres.Count; i++)
+            {
+                spher += player.spheres[i].writer();
+            }
+            File.WriteAllText(filePathAndName,
+                $"{player.name}\n" +
+                $"{player.health}\n" +
+                $"{player.damage}\n" +
+                $"{player.resist}\n" +
+                $"---\n" +
+                $"{(player.hat == null ? new Armor(null, null, null).writer() : player.hat.writer())}" +
+                $"{(player.arms == null ? new Armor(null, null, null).writer() : player.arms.writer())}" +
+                $"{(player.body == null ? new Armor(null, null, null).writer() : player.body.writer())}" +
+                $"{(player.legs == null ? new Armor(null, null, null).writer() : player.legs.writer())}" +
+                $"---\n" +
+                $"{player.weapon.writer()}" +
+                $"---\n" +
+                $"{inv}" +
+                $"---\n" +
+                $"{spher}");
+
+
+            StreamWriter sw = new StreamWriter(filePathAndName, true, Encoding.UTF8);
+            sw.Close();
+        }
+
         public static void open(Character player, Sphere sphere)
         {
             Config config = new Config();
