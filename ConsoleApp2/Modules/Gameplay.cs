@@ -297,6 +297,7 @@ namespace ConsoleApp2.Modules
                             Console.WriteLine($"{i + 1}: ");
                             player.inventory[i].Info();
                         }
+                        Thread.Sleep(3000);
                         break;
 
                     case ConsoleKey.D4:
@@ -307,13 +308,22 @@ namespace ConsoleApp2.Modules
                             Console.WriteLine($"{i + 1}: ");
                             player.spheres[i].Info();
                         }
-                        Console.WriteLine("Choose item(item number, 0 - turn back to action list): ");
+                        Console.WriteLine("Choose sphere(sphere number, 0 - turn back to action list): ");
                         chs = int.Parse(Console.ReadLine());
                         if (chs > 0 && chs < player.spheres.Count)
                         {
-                            open(player, player.spheres[chs-1]);
+                            Sphere sphere = player.spheres[chs - 1];
+                            Gameplay.open(player, sphere);
                             player.spheres.RemoveAt(chs - 1);
                         }
+                        Console.Clear();
+                        Console.WriteLine($"Spheres:");
+                        for (int i = 0; i < player.spheres.Count; i++)
+                        {
+                            Console.WriteLine($"{i + 1}: ");
+                            player.spheres[i].Info();
+                        }
+                        Thread.Sleep(3000);
                         break;
 
                     case ConsoleKey.D5:
