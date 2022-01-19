@@ -1,6 +1,7 @@
 ﻿using ConsoleApp2.Modules;
 using System;
 using System.IO;
+using System.Threading;
 
 namespace ConsoleApp2
 {
@@ -33,6 +34,7 @@ namespace ConsoleApp2
                 }
                 else
                 {
+                    Console.Clear();
                     Console.Write(
                     "!!! TO SELECT, USE THE BUTTONS SPECIFIED TO THE LEFT OF THE SECTION !!!\n" +
                     "\n(1) Continue\n" +
@@ -49,6 +51,8 @@ namespace ConsoleApp2
                         Console.Clear();
                         player = Gameplay.login();
                         player.Info();
+                        Thread.Sleep(5000);
+                        Gameplay.Game(player);
                         break;
 
                     case ConsoleKey.D2:

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using System.IO;
+using System.Threading;
 
 namespace ConsoleApp2.Modules
 {
@@ -186,7 +187,7 @@ namespace ConsoleApp2.Modules
         public void fight(Character player)
         {
             Random rnd = new Random();
-            int choose = 0;
+            ConsoleKeyInfo key;
             string appRootDir = new DirectoryInfo(Environment.CurrentDirectory).Parent.Parent.FullName;
             var filePathAndName = Path.Combine(appRootDir, "..\\Texts\\fight.txt");
             StreamReader sr = new StreamReader(filePathAndName);
@@ -202,19 +203,23 @@ namespace ConsoleApp2.Modules
             Console.WriteLine(startFightDialogs[rnd.Next(0, startFightDialogs.Length)]);
             Enemy enemy = new Enemy();
             enemy.Info();
+            Thread.Sleep(5000);
             do
             {
-                choose = -1;
-                Console.WriteLine("What you gonna do?\n1-atack 2-item 0-escape");
-                switch (choose)
+                Console.Clear();
+                Console.WriteLine("What you gonna do?\n(1) atack (2) item (0) escape");
+                key = Console.ReadKey();
+                switch (key.Key)
                 {
-                    case 1:
-                        player.Atack(enemy);
-                        enemy.Atack(player);
+                    case ConsoleKey.D1:
+                        enemy.health -= player.Atack(enemy);
+                        Console.WriteLine();
+                        player.health -= enemy.Atack(player);
+                        Thread.Sleep(10000);
                         Console.Clear();
                         break;
 
-                    case 2:
+                    case ConsoleKey.D2:
                         var chs = 0;
                         Console.WriteLine($"inventory:");
                         for (int i = 0; i < player.inventory.Count; i++)
@@ -230,7 +235,7 @@ namespace ConsoleApp2.Modules
                         }
                         goto default;
 
-                    case 0:
+                    case ConsoleKey.Escape:
                         int luck = rnd.Next(1, 2);
                         if (luck == 2) 
                         {
@@ -241,12 +246,85 @@ namespace ConsoleApp2.Modules
                         break;
 
                     default:
-                        choose = -1;
                         break;
                 }
                 player.Info();
                 enemy.Info();
-            } while(player.health <= 0 || enemy.health <= 0 || choose == 0);
+                Thread.Sleep(10000);
+            } while(player.health > 0 && enemy.health > 0 && key.Key != ConsoleKey.Escape);
+        }
+
+        public static void Game(Character player)
+        {
+            ConsoleKeyInfo key;
+
+            do
+            {
+                Console.Clear();
+                Console.Write(
+                "(1) Look for fight\n" +
+                "(2) Stats\n" +
+                "(3) Inventory\n" +
+                "(4) Spheres\n" +
+                "(5) Save\n" +
+                "(ESC) Exit");
+
+                key = Console.ReadKey();
+
+                switch (key.Key)
+                {
+                    case ConsoleKey.D1:
+                        Console.Clear();
+                        int[] chance = new int[] { 1, 2, 2, 2, 1, 1, 1, 2 };
+                        int success = chance[new Random().Next(0, chance.Length)];
+                        if (success == 2)
+                        {
+                            Console.Write("You searched everywhere, but did not find enemies");
+                            Thread.Sleep(6000);
+                            break;
+                        }
+                        new Gameplay().fight(player);
+                        break;
+
+                    case ConsoleKey.D2:
+                        player.Info();
+                        break;
+
+                    case ConsoleKey.D3:
+                        Console.WriteLine($"Inventory:");
+                        for (int i = 0; i < player.inventory.Count; i++)
+                        {
+                            Console.WriteLine($"{i + 1}: ");
+                            player.inventory[i].Info();
+                        }
+                        break;
+
+                    case ConsoleKey.D4:
+                        var chs = 0;
+                        Console.WriteLine($"Spheres:");
+                        for (int i = 0; i < player.spheres.Count; i++)
+                        {
+                            Console.WriteLine($"{i + 1}: ");
+                            player.spheres[i].Info();
+                        }
+                        Console.WriteLine("Choose item(item number, 0 - turn back to action list): ");
+                        chs = int.Parse(Console.ReadLine());
+                        if (chs > 0 && chs < player.spheres.Count)
+                        {
+                            open(player, player.spheres[chs-1]);
+                            player.spheres.RemoveAt(chs - 1);
+                        }
+                        break;
+
+                    case ConsoleKey.D5:
+                        save(player);
+                        break;
+
+                    default:
+                        goto case ConsoleKey.D5;
+                }
+            } while (key.Key != ConsoleKey.Escape);
+            
         }
     }
 }

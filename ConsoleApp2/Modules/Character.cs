@@ -49,7 +49,8 @@ namespace ConsoleApp2
 
         public int Atack(Enemy enemy)
         {
-            return enemy.health - (this.damage * enemy.resist / 100);
+            Console.Write($"You dealt {this.damage - this.damage * enemy.resist / 100} damage to the enemy");
+            return this.damage - this.damage * enemy.resist / 100;
         }
 
         public void Equip(Weapon weapon)

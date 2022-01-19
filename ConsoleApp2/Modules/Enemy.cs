@@ -22,12 +22,14 @@ namespace ConsoleApp2
 
         public int Atack(Character player)
         {
-            return player.health - (this.damage * player.resist / 100);
+            Console.Write($"Enemy dealt {this.damage - this.damage * player.resist / 100} damage to you");
+            return this.damage - this.damage * player.resist / 100;
         }
 
         public void Info()
         {
             Console.WriteLine(
+                $"Enemy:\n" +
                 $"name: {this.name}\n" +
                 $"health: {this.health}\n" +
                 $"damage: {this.damage}\n" +
