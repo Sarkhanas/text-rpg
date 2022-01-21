@@ -31,10 +31,11 @@ namespace ConsoleApp2
             this.resist = new Random().Next(1, 30);
         }
 
-        public Character(string name, int health, int damage, int resist, Armor hat, Armor arms,
+        public Character(string name, int maxHP, int health, int damage, int resist, Armor hat, Armor arms,
             Armor body, Armor legs, Weapon weapon, List<Item> inventory, List<Sphere> spheres)
         {
             this.name = name;
+            this.maxHP = maxHP;
             this.health = health;
             this.damage = damage;
             this.resist = resist;
@@ -174,7 +175,7 @@ namespace ConsoleApp2
                 this.inventory[i].Info();
             }
             Console.WriteLine("spheres: ");
-            for (int i = 0; i < this.inventory.Count; i++)
+            for (int i = 0; i < this.spheres.Count; i++)
             {
                 this.spheres[i].Info();
             }

@@ -42,7 +42,7 @@ namespace ConsoleApp2.Modules
 
                 StreamReader sr = new StreamReader(filePathAndName);
                 string lin = sr.ReadLine();
-                string[] inf = new string[32];
+                string[] inf = File.ReadAllLines(filePathAndName);
                 inf[0] = lin;
                 int p = 1;
                 do
@@ -54,7 +54,7 @@ namespace ConsoleApp2.Modules
                 while (lin != null);
                 List<Item> inventory = new List<Item>();
                 int itemIndexEnd = 0;
-                for (int l = 22; l < inf.Length; l++)
+                for (int l = 23; l < inf.Length; l++)
                 {
                     if (inf[l] == "---")
                     {
@@ -62,20 +62,20 @@ namespace ConsoleApp2.Modules
                         break;
                     }
                 }
-                for (int i = 22; i < itemIndexEnd; i += 3)
+                for (int i = 23; i < itemIndexEnd-3; i += 3)
                 {
                     inventory.Add(new Item(inf[i], inf[i + 1], inf[i + 2]));
                 }
                 List<Sphere> spheres = new List<Sphere>();
-                for (int i = itemIndexEnd + 1; i < inf.Length - 3; i += 3)
+                for (int i = itemIndexEnd + 1; i < inf.Length-3; i += 3)
                 {
                     spheres.Add(new Sphere(inf[i], inf[i + 1], inf[i + 2]));
                 }
                 Character player = new Character(
-                    inf[0], int.Parse(inf[1]), int.Parse(inf[2]), int.Parse(inf[3]),
-                    new Armor(inf[5], inf[6], inf[7]), new Armor(inf[8], inf[9], inf[10]),
-                    new Armor(inf[11], inf[12], inf[13]), new Armor(inf[14], inf[15], inf[16]),
-                    new Weapon(inf[18], inf[19], int.Parse(inf[20])),
+                    inf[0],int.Parse(inf[1]), int.Parse(inf[2]), int.Parse(inf[3]), int.Parse(inf[4]),
+                    new Armor(inf[6], inf[7], inf[8]), new Armor(inf[9], inf[10], inf[11]),
+                    new Armor(inf[12], inf[13], inf[14]), new Armor(inf[15], inf[16], inf[17]),
+                    new Weapon(inf[19], inf[20], int.Parse(inf[21])),
                     inventory, spheres);
                 sr.Close();
                 return player;
@@ -93,16 +93,27 @@ namespace ConsoleApp2.Modules
             var filePathAndName = Path.Combine(appRootDir, "..\\Profile\\profile.txt");
             string inv = "";
             string spher = "";
-            for (int i = 0; i < player.inventory.Count; i++)
+
+            if (player.inventory.Count > 0 && player.inventory != null)
             {
-                inv += player.inventory[i].writer();
+                List<Item> inventory = player.inventory;
+                for (int i = 0; i < inventory.Count; i++)
+                {
+                    inv += inventory[i].writer();
+                }
             }
-            for (int i = 0; i < player.spheres.Count; i++)
+            
+            if (player.spheres.Count > 0 && player.spheres != null)
             {
-                spher += player.spheres[i].writer();
+                for (int i = 0; i < player.spheres.Count; i++)
+                {
+                    spher += player.spheres[i].writer();
+                }
             }
+            
             File.WriteAllText(filePathAndName,
                 $"{player.name}\n" +
+                $"{player.maxHP}\n" +
                 $"{player.health}\n" +
                 $"{player.damage}\n" +
                 $"{player.resist}\n" +
@@ -220,6 +231,7 @@ namespace ConsoleApp2.Modules
                         break;
 
                     case ConsoleKey.D2:
+                        Console.Clear();
                         var chs = 0;
                         Console.WriteLine($"inventory:");
                         for (int i = 0; i < player.inventory.Count; i++)
@@ -229,20 +241,29 @@ namespace ConsoleApp2.Modules
                         }
                         Console.WriteLine("Choose item(item number, 0 - turn back to action list): ");
                         chs = int.Parse(Console.ReadLine());
-                        if (chs > 0 && chs < player.inventory.Count)
+                        if (chs > 0 && chs <= player.inventory.Count)
                         {
                             player.inventory[chs-1].Use(player);
+                            player.inventory.RemoveAt(chs-1);
                         }
                         goto default;
 
                     case ConsoleKey.Escape:
-                        int luck = rnd.Next(1, 2);
+                        int[] chance = new int[] { 2, 1, 1, 1, 2, 1, 1, 1, 1, 2};
+                        int luck = chance[rnd.Next(0, chance.Length)];
                         if (luck == 2) 
                         {
+                            Console.Clear();
                             Console.WriteLine("You tried escape, but something goes wrong");
                             enemy.Atack(player);
+                            Console.WriteLine("Press any button");
+                            Console.ReadKey();
                             goto default;
-                        } 
+                        }
+                        Console.WriteLine(
+                            "You succesfully escaped\n" +
+                            "Press any button");
+                        Console.ReadKey();
                         break;
 
                     default:
@@ -288,6 +309,7 @@ namespace ConsoleApp2.Modules
 
                     case ConsoleKey.D2:
                         player.Info();
+                        Thread.Sleep(5000);
                         break;
 
                     case ConsoleKey.D3:
@@ -310,13 +332,14 @@ namespace ConsoleApp2.Modules
                         }
                         Console.WriteLine("Choose sphere(sphere number, 0 - turn back to action list): ");
                         chs = int.Parse(Console.ReadLine());
-                        if (chs > 0 && chs < player.spheres.Count)
+                        if (chs > 0 && chs <= player.spheres.Count)
                         {
                             Sphere sphere = player.spheres[chs - 1];
                             Gameplay.open(player, sphere);
                             player.spheres.RemoveAt(chs - 1);
                         }
                         Console.Clear();
+                        player.Info();
                         Console.WriteLine($"Spheres:");
                         for (int i = 0; i < player.spheres.Count; i++)
                         {
