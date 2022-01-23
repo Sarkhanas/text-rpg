@@ -41,43 +41,40 @@ namespace ConsoleApp2.Modules
                 }
 
                 StreamReader sr = new StreamReader(filePathAndName);
-                string lin = sr.ReadLine();
-                string[] inf = File.ReadAllLines(filePathAndName);
-                inf[0] = lin;
-                int p = 1;
-                do
-                {
-                    lin = sr.ReadLine();
-                    inf[p] += lin;
-                    p++;
-                }
-                while (lin != null);
+                string lin = sr.ReadToEnd();
+                string[] inf = lin.Split('\n');
+
                 List<Item> inventory = new List<Item>();
                 int itemIndexEnd = 0;
-                for (int l = 23; l < inf.Length; l++)
-                {
-                    if (inf[l] == "---")
-                    {
-                        itemIndexEnd = l;
-                        break;
-                    }
-                }
-                for (int i = 23; i < itemIndexEnd-3; i += 3)
-                {
-                    inventory.Add(new Item(inf[i], inf[i + 1], inf[i + 2]));
-                }
+
+                for (int i = 23; i < inf.Length; i++)
+                    if (inf[i] == "---")
+                        itemIndexEnd = i;
+
+                for (int i = 23; i+2 < itemIndexEnd; i+=3)
+                    inventory.Add(new Item(inf[i], inf[i] + 1, inf[i + 2]));
+
                 List<Sphere> spheres = new List<Sphere>();
-                for (int i = itemIndexEnd + 1; i < inf.Length-3; i += 3)
-                {
-                    spheres.Add(new Sphere(inf[i], inf[i + 1], inf[i + 2]));
-                }
+
+                for (int i = itemIndexEnd + 1; i+2 < inf.Length; i+=3)
+                    spheres.Add(new Sphere(inf[i], inf[i+1], inf[i+2]));
+
                 Character player = new Character(
-                    inf[0],int.Parse(inf[1]), int.Parse(inf[2]), int.Parse(inf[3]), int.Parse(inf[4]),
-                    new Armor(inf[6], inf[7], inf[8]), new Armor(inf[9], inf[10], inf[11]),
-                    new Armor(inf[12], inf[13], inf[14]), new Armor(inf[15], inf[16], inf[17]),
+                    inf[0],
+                    int.Parse(inf[1]),
+                    int.Parse(inf[2]),
+                    int.Parse(inf[3]),
+                    int.Parse(inf[4]),
+                    new Armor(inf[6], inf[7], inf[8]),
+                    new Armor(inf[9], inf[10], inf[11]),
+                    new Armor(inf[12], inf[13], inf[14]),
+                    new Armor(inf[15], inf[16], inf[17]),
                     new Weapon(inf[19], inf[20], int.Parse(inf[21])),
-                    inventory, spheres);
+                    inventory,
+                    spheres);
+
                 sr.Close();
+
                 return player;
             } catch (Exception e)
             {
