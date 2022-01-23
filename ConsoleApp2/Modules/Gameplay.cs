@@ -8,6 +8,7 @@ namespace ConsoleApp2.Modules
 {
     class Gameplay
     {
+        public int winner = 0;
         public Gameplay() {}
 
         public static Character register()
@@ -97,6 +98,8 @@ namespace ConsoleApp2.Modules
                 for (int i = 0; i < inventory.Count; i++)
                 {
                     inv += inventory[i].writer();
+                    if (i != player.inventory.Count-1)
+                        inv += "\n";
                 }
             }
             
@@ -105,6 +108,8 @@ namespace ConsoleApp2.Modules
                 for (int i = 0; i < player.spheres.Count; i++)
                 {
                     spher += player.spheres[i].writer();
+                    if (i != player.spheres.Count-1)
+                        spher += "\n";
                 }
             }
             
@@ -210,12 +215,13 @@ namespace ConsoleApp2.Modules
             string[] startFightDialogs = fightDialogs.Split(new char[] { '&' });
             Console.WriteLine(startFightDialogs[rnd.Next(0, startFightDialogs.Length)]);
             Enemy enemy = new Enemy();
+            Console.WriteLine();
             enemy.Info();
             Thread.Sleep(5000);
             do
             {
                 Console.Clear();
-                Console.WriteLine("What you gonna do?\n(1) atack (2) item (0) escape");
+                Console.WriteLine("What you gonna do?\n(1) atack (2) item (ESC) escape");
                 key = Console.ReadKey();
                 switch (key.Key)
                 {
@@ -251,14 +257,14 @@ namespace ConsoleApp2.Modules
                         if (luck == 2) 
                         {
                             Console.Clear();
-                            Console.WriteLine("You tried escape, but something goes wrong");
+                            Console.WriteLine(" You tried escape, but something goes wrong");
                             enemy.Atack(player);
-                            Console.WriteLine("Press any button");
+                            Console.WriteLine("\nPress any button");
                             Console.ReadKey();
                             goto default;
                         }
                         Console.WriteLine(
-                            "You succesfully escaped\n" +
+                            " You succesfully escaped\n" +
                             "Press any button");
                         Console.ReadKey();
                         break;
@@ -267,14 +273,46 @@ namespace ConsoleApp2.Modules
                         break;
                 }
                 player.Info();
+                Console.WriteLine();
                 enemy.Info();
                 Thread.Sleep(10000);
+                if (enemy.health <= 0)
+                {
+                    winner = 1;
+                }
+                else if (player.health <= 0)
+                {
+                    winner = -1;
+                }
             } while(player.health > 0 && enemy.health > 0 && key.Key != ConsoleKey.Escape);
+
+            if (winner == 1)
+            {
+                Console.Clear();
+                Console.WriteLine("You win");
+                int collectedItems = rnd.Next(0, 3);
+                if (collectedItems > 0)
+                {
+                    for (int i = 0; i < collectedItems; i++)
+                        player.spheres.Add(new Sphere());
+                    Thread.Sleep(2500);
+                    Console.Clear();
+                    Console.WriteLine($"You collected {collectedItems} new spheres");
+                    Thread.Sleep(2500);
+                }
+            }
+            else if (winner == -1)
+            {
+                Console.Clear();
+                Console.WriteLine("You've been killed");
+                player.winner = -1;
+            }
         }
 
         public static void Game(Character player)
         {
             ConsoleKeyInfo key;
+            int defeated = 0;
 
             do
             {
@@ -353,8 +391,13 @@ namespace ConsoleApp2.Modules
                     default:
                         goto case ConsoleKey.D5;
                 }
-            } while (key.Key != ConsoleKey.Escape);
-            
+            } while (key.Key != ConsoleKey.Escape && player.winner != -1);
+            if (player.winner == -1)
+            {
+                string appRootDir = new DirectoryInfo(Environment.CurrentDirectory).Parent.Parent.FullName;
+                var filePathAndName = Path.Combine(appRootDir, "..\\Profile\\profile.txt");
+                File.Delete(filePathAndName);
+            }
         }
     }
 }
