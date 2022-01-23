@@ -5,7 +5,7 @@
 ; NOTE: The value of AppId uniquely identifies this application.
 ; Do not use the same AppId value in installers for other applications.
 ; (To generate a new GUID, click Tools | Generate GUID inside the IDE.)
-AppId={{94FB08FC-6D12-4825-B9B6-AFF930F451E5}
+AppId={{8E91A2FE-5373-45BF-A13D-53EA72020ABA}
 AppName=text-rpg
 AppVersion=1.5
 ;AppVerName=text-rpg 1.5
@@ -30,12 +30,7 @@ Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{
 
 [Files]
 Source: "C:\Users\Daniil\Desktop\text-rpg\ConsoleApp2\bin\Debug\netcoreapp3.1\ConsoleApp2.exe"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\Daniil\Desktop\text-rpg\ConsoleApp2\bin\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
-Source: "C:\Users\Daniil\Desktop\text-rpg\ConsoleApp2\Config\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
-Source: "C:\Users\Daniil\Desktop\text-rpg\ConsoleApp2\Modules\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
-Source: "C:\Users\Daniil\Desktop\text-rpg\ConsoleApp2\obj\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
-Source: "C:\Users\Daniil\Desktop\text-rpg\ConsoleApp2\Profile\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
-Source: "C:\Users\Daniil\Desktop\text-rpg\ConsoleApp2\Texts\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "C:\Users\Daniil\Desktop\text-rpg\ConsoleApp2\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 [Icons]
