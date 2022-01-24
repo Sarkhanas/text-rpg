@@ -95,6 +95,8 @@ namespace ConsoleApp2
                 case "glazing":
                     this.health = 1;
 
+                    this.resist = 99;
+
                     this.damage += this.health > 1 ?
                         30 + (this.health * 99) / 100
                         :

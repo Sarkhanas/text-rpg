@@ -1,8 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "ciHpsySaf1I+w6fAD1+KyTETOD+rt+8YdRBk4P10+Uy4AU1MjH8SQ6NCb0TSjlw0g1uZRkGXp0qGB++NgwDM+A==",
+  "dgSpecHash": "x7KzsxNwY5uVCkqysKZU30OLg7xv2leVK4WCl2byv/nd/CRBadThwjG+VQ2HO+atX7b2JIuJoDuNk0rdZos1kg==",
   "success": true,
-  "projectFilePath": "C:\\Users\\Daniil\\Desktop\\text-rpg\\ConsoleApp2\\ConsoleApp2.csproj",
-  "expectedPackageFiles": [],
+  "projectFilePath": "C:\\Users\\Daniil\\source\\repos\\text-rpg\\ConsoleApp2\\ConsoleApp2.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\Daniil\\.nuget\\packages\\microsoft.netcore.app.host.win-x64\\3.1.21\\microsoft.netcore.app.host.win-x64.3.1.21.nupkg.sha512"
+  ],
   "logs": []
 }

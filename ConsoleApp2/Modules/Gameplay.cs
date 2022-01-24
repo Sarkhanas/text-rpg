@@ -276,13 +276,13 @@ namespace ConsoleApp2.Modules
                 Console.WriteLine();
                 enemy.Info();
                 Thread.Sleep(10000);
-                if (enemy.health <= 0)
-                {
-                    winner = 1;
-                }
-                else if (player.health <= 0)
+                if (player.health <= 0 || player.health <= 0 && enemy.health <= 0)//enemy.health <= 0
                 {
                     winner = -1;
+                }
+                else if (enemy.health <= 0)
+                {
+                    winner = 1;
                 }
             } while(player.health > 0 && enemy.health > 0 && key.Key != ConsoleKey.Escape);
 
