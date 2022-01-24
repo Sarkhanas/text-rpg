@@ -7,6 +7,7 @@ namespace ConsoleApp2
 {
     class Character
     {
+        public int winner = 0; 
         public string name;
         public int maxHP = 100;
         public int health;
@@ -173,11 +174,13 @@ namespace ConsoleApp2
             for (int i = 0; i < this.inventory.Count; i++)
             {
                 this.inventory[i].Info();
+                Console.WriteLine();
             }
             Console.WriteLine("spheres: ");
             for (int i = 0; i < this.spheres.Count; i++)
             {
                 this.spheres[i].Info();
+                Console.WriteLine();
             }
         }
     }
