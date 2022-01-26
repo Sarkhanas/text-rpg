@@ -1,0 +1,39 @@
+alice
+100
+49
+11
+11
+---
+
+
+
+
+
+
+
+
+
+
+
+
+---
+Seal of the Earth
+axe
+10
+---
+---
+rare sphere
+rare
+weapon
+uncommon sphere
+uncommon
+weapon
+legend sphere
+legend
+weapon
+rare sphere
+rare
+armor
+legend sphere
+legend
+armor
